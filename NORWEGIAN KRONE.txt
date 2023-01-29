@@ -1,0 +1,120 @@
+import java.util.*;
+class Main{
+
+static final int MAX = 100000;
+
+
+static int []deno = new int[MAX + 1];
+
+
+static List<Integer> vendingmachine =
+			new LinkedList<Integer>();
+
+
+static int MinCoins(int number,int arr[], int m)
+{
+
+if (number == 0)
+{
+	deno[0] = 0;
+	return 0;
+}
+
+
+if (deno[number] != -1)
+	return deno[number];
+
+
+int value = Integer.MAX_VALUE;
+
+
+for (int i = 0; i < m; i++)
+{
+	if (arr[i] <= number)
+	{
+	int x = MinCoins(number - arr[i],
+							arr, m);
+
+	if (x != Integer.MAX_VALUE)
+		value = Math.min(value, 1 + x);
+	}
+}
+
+
+deno[number] = value;
+return value;
+}
+
+
+static void valuesforamoount(int number,
+						int arr[], int m)
+{
+
+if (number == 0)
+{ System.out.println("Based on Norwegian Krown Denominations");
+
+	for (int it : vendingmachine)
+	{
+	   
+	System.out.println(it + " ");
+	}
+	return;
+}
+
+for (int i = 0; i < m; i++)
+{
+
+	if (number - arr[i] >= 0 &&
+		deno[number - arr[i]] + 1 ==
+		deno[number])
+	{
+
+	vendingmachine.add(arr[i]);
+
+
+	valuesforamoount(number - arr[i], arr, m);
+	break;
+	}
+}
+}
+
+
+static void coinchange(int X,
+							int arr[], int N)
+{
+
+for (int i = 0; i < deno.length; i++)
+	deno[i] = -1;
+
+
+int isPossible = MinCoins(X, arr, N);
+
+
+if (isPossible == Integer.MAX_VALUE)
+{
+	System.out.print("-1");
+}
+
+
+else
+{
+	valuesforamoount(X, arr, N);
+}
+}
+
+
+public static void main(String[] args)
+{
+
+Scanner sc=new Scanner(System.in);
+System.out.println("Enter the amount");
+  int amount=sc.nextInt();
+
+int array[] = {1,5,10,20};
+
+int N = array.length;
+
+
+coinchange(amount, array, N);
+}
+}
